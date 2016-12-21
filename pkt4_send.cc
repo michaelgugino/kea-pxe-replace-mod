@@ -10,7 +10,7 @@
 #include <log/logger.h>
 #include <log/macros.h>
 #include <log/message_initializer.h>
-#include <io_address.h>
+//#include <io_address.h>
 
 using namespace isc::dhcp;
 using namespace isc::hooks;
@@ -44,22 +44,27 @@ int pkt4_send(CalloutHandle& handle) {
     std::stringstream ss;
     std::string replacement_opt = "/dev/notnull";
     string hwaddr;
-    OptionCollection 	options_collection;
+    //OptionCollection 	options_collection;
     OptionPtr opt_ptr;
 
-    // TODO: we should just get this info here instead of pkt_receive.
-    handle.getContext("hwaddr", hwaddr);
     // TODO: Need to check to see if param_url ends in /, if not, append it.
     param_url.append(hwaddr);
 
     Pkt4Ptr response4_ptr;
     handle.getArgument("response4", response4_ptr);
-    options_collection = response4_ptr->options_;
+    HWAddrPtr hwaddr_ptr = response4_ptr->getHWAddr();
+    hwaddr = hwaddr_ptr->toText(false);
+    
+    //options_collection = response4_ptr->options_;
     opt_ptr = response4_ptr->getOption((uint16_t)67);
+
+    // Testing things.
     LOG_INFO(logger, "PRL_BASE").arg(opt_ptr->toString());
     opt_ptr->setData(replacement_opt.begin(), replacement_opt.end());
     opt_ptr = response4_ptr->getOption((uint16_t)67);
     LOG_INFO(logger, "PRL_BASE").arg(opt_ptr->toString());
+    /* End Testing */
+
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
 

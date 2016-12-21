@@ -8,24 +8,20 @@
 
 using namespace isc::hooks;
 namespace pt = boost::property_tree;
-// "Interesting clients" log file handle definition.
-std::fstream interesting;
+
 std::string param_url;
 extern "C" {
 int load(LibraryHandle& handle) {
     pt::ptree root;
-    interesting.open("/data/clients/interesting.log",
-                     std::fstream::out | std::fstream::app);
+
     pt::read_json("/etc/kea/params.json", root);
     param_url = root.get<std::string>("url");
-    interesting << "example.so loaded\n" << std::endl;
-    interesting << param_url << "\n";
-    return (interesting ? 0 : 1);
+    if (param_url.empty())
+        return 1;
+    std::cout << "example.so loaded\n" << std::endl;
+    return 0;
 }
 int unload() {
-    if (interesting) {
-        interesting.close();
-    }
     return (0);
 }
 }

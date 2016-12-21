@@ -14,25 +14,13 @@ int pkt4_receive(CalloutHandle& handle) {
     // object as Pkt4Ptr.  Retrieve a pointer to the object.
     Pkt4Ptr query4_ptr;
     handle.getArgument("query4", query4_ptr);
-    interesting << "new request\n";
-    interesting << query4_ptr->toText() << "\n";
-    flush(interesting);
     // Point to the hardware address.
     HWAddrPtr hwaddr_ptr = query4_ptr->getHWAddr();
-    // The hardware address is held in a public member variable. We'll classify
-    // it as interesting if the sum of all the bytes in it is divisible by 4.
-    //  (This is a contrived example after all!)
-    long sum = 0;
-    for (int i = 0; i < hwaddr_ptr->hwaddr_.size(); ++i) {
-        sum += hwaddr_ptr->hwaddr_[i];
-    }
-    // Classify it.
-    if (1 == 1) {
-        // Store the text form of the hardware address in the context to pass
-        // to the next callout.
-        string hwaddr = hwaddr_ptr->toText(false);
-        handle.setContext("hwaddr", hwaddr);
-    }
+
+    // Store the text form of the hardware address in the context to pass
+    // to the next callout.
+    string hwaddr = hwaddr_ptr->toText(false);
+    handle.setContext("hwaddr", hwaddr);
     return (0);
 };
 }
