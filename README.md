@@ -1,5 +1,5 @@
 # kea-pxe-replace-mod
-Kea module utilizing hooks api to replace pxe options (next server, file) via web request
+Kea module utilizing hooks api to replace pxe options (siaddr, option 66, 67) via web request.
 
 # Usage
 Install the compiled library somewhere sensible (such as /usr/local/lib/kea-pxe-replace4.so)

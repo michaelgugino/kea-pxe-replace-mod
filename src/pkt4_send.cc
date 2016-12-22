@@ -1,15 +1,10 @@
-#include <hooks/hooks.h>
 #include <dhcp/pkt4.h>
 #include <log/logger.h>
 #include <log/macros.h>
 #include <log/message_initializer.h>
 #include "library_common.h"
-#include <string>
 #include <curl/curl.h>
 #include <sstream>
-#include <iostream>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 
 using namespace isc::dhcp;
 using namespace isc::hooks;

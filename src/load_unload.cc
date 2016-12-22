@@ -1,10 +1,5 @@
 // load_unload.cc
-#include <hooks/hooks.h>
 #include "library_common.h"
-#include <string>
-#include <iostream>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 
 using namespace isc::hooks;
 namespace pt = boost::property_tree;
