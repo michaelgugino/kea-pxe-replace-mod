@@ -4,7 +4,7 @@ Kea module utilizing hooks api to replace pxe options (next server, file) via we
 # Usage
 Install the compiled library somewhere sensible (such as /usr/local/lib/kea-pxe-replace4.so)
 
-Configure /etc/kea/kea-pxe-replace.conf
+Configure /etc/kea/kea-pxe-replace4.conf
 
 Configure /etc/kea/kea-dhcp4.conf
 
