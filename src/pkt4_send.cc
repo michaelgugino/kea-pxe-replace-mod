@@ -48,6 +48,7 @@ int pkt4_send(CalloutHandle& handle) {
     pt::ptree root;
     std::stringstream ss;
     string hwaddr;
+    string final_url;
     //OptionCollection 	options_collection;
     //options_collection = response4_ptr->options_;
     OptionPtr tftp_server_name_opt_ptr;
@@ -61,7 +62,9 @@ int pkt4_send(CalloutHandle& handle) {
     HWAddrPtr hwaddr_ptr = response4_ptr->getHWAddr();
     isc::asiolink::IOAddress orig_siaddr(response4_ptr->getSiaddr());
     hwaddr = hwaddr_ptr->toText(false);
-    json_params[0].append(hwaddr);
+    //json_params[0].append(hwaddr);
+    final_url = json_params[0] + hwaddr;
+    LOG_DEBUG(logger, 0, "PRL_BASE").arg(final_url);
 
     tftp_server_name_opt_ptr = response4_ptr->getOption((uint16_t)66);
     bootfile_name_opt_ptr = response4_ptr->getOption((uint16_t)67);
@@ -99,14 +102,13 @@ int pkt4_send(CalloutHandle& handle) {
         return(1);
     }
 
-    // TODO: error check the things.
     // If we don't set a timeout, curl will try for 300 seconds by default.
     curl_opt_res += curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
     curl_opt_res += curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 1L);
     // libcurl's docs say to cast as void, don't blame me.
     curl_opt_res += curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)response_memfile);
     // CURLOPT_URL takes a char*
-    curl_opt_res += curl_easy_setopt(curl, CURLOPT_URL, json_params[0].c_str());
+    curl_opt_res += curl_easy_setopt(curl, CURLOPT_URL, (final_url).c_str());
     curl_opt_res += curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 
     #ifdef SKIP_PEER_VERIFICATION
@@ -150,7 +152,6 @@ int pkt4_send(CalloutHandle& handle) {
     bootfile_json_field = root.get_optional<std::string>(json_params[3]);
 
     if (orig_siaddr.toText() != "0.0.0.0" && siaddr_json_field) {
-        // TODO: change to debug
         LOG_DEBUG(logger, 0, "PRL_REPLACE_FIELD").arg("siaddr").arg(*siaddr_json_field);
         isc::asiolink::IOAddress new_siaddr(*siaddr_json_field);
         response4_ptr->setSiaddr(new_siaddr);

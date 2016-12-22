@@ -8,12 +8,18 @@ Configure /etc/kea/kea-pxe-replace4.conf
 
 Configure /etc/kea/kea-dhcp4.conf
 
+Will result in requesting json from "url" in the form of "url+mac"
+Example: http://myurl.com/aa:bb:cc:dd:ee:ff
+Note:  a '/' is not inserted between the url and the mac address for you, you
+must provide that in the url if necessary.
+
 ## Build requirements
 This software has been developed on Debian Stretch and Ubuntu 16.04.  This
 software is currently experimental, use at your own risk (as always).
 
 apt-get install g++ libcurl4-gnutls-dev libboost-dev kea-dev
 
+./build.sh
 
 ## Testing locally
 
