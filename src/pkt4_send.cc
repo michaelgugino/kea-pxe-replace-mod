@@ -30,34 +30,43 @@ const MessageInitializer message_initializer(log_messages);
 extern "C" {
 int pkt4_send(CalloutHandle& handle) {
 
+    // Variables related to curl (there are "C" variables)
     CURL *curl;
     CURLcode res;
     struct curl_slist *list=NULL;
     bool perform_updates = 0;
     int curl_opt_res = 0;
 
+    // "C" varaibles.
     char *bp;
     size_t size;
     FILE *response_memfile;
 
-    pt::ptree root;
-    std::stringstream ss;
+    // string variables
     string hwaddr;
     string final_url;
-    //OptionCollection 	options_collection;
-    //options_collection = response4_ptr->options_;
+
+    // pkt4 related variables.
+    Pkt4Ptr response4_ptr;
+    HWAddrPtr hwaddr_ptr;
     OptionPtr tftp_server_name_opt_ptr;
     OptionPtr bootfile_name_opt_ptr;
+    // isc::asiolink::IOAddress orig_siaddr;
+    // isc::asiolink::IOAddress new_siaddr;
+
+    // Boost / json related variables.
+    pt::ptree root;
+    std::stringstream ss;
     boost::optional<std::string> siaddr_json_field;
     boost::optional<std::string> tftp_server_json_field;
     boost::optional<std::string> bootfile_json_field;
 
-    Pkt4Ptr response4_ptr;
+    /* Begin Code */
     handle.getArgument("response4", response4_ptr);
-    HWAddrPtr hwaddr_ptr = response4_ptr->getHWAddr();
+    hwaddr_ptr = response4_ptr->getHWAddr();
     isc::asiolink::IOAddress orig_siaddr(response4_ptr->getSiaddr());
     hwaddr = hwaddr_ptr->toText(false);
-    //json_params[0].append(hwaddr);
+
     final_url = json_params[0] + hwaddr;
     LOG_DEBUG(logger, 0, "PRL_BASE").arg(final_url);
 
