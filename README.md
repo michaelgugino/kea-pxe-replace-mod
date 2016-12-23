@@ -6,6 +6,20 @@ Install the compiled library somewhere sensible (such as /usr/local/lib/kea-pxe-
 
 Configure /etc/kea/kea-pxe-replace4.conf
 
+Please see the example config in the etc/ directory.  Each key is mandatory,
+however the value can be a value of your choosing. These refer to the fields
+in the json response that this module will use for each parameter; this is so
+you can configure an existing API service to interact with the module.  Nested
+fields should be dot (.) separated.  IE: 'myserver.params.siaddr'.
+
+For the response, the field does not have to be present.  If the field is not
+present, it will not attempt to override the value.
+
+These values are only applied to fields already set.  If next-server is not defined
+somewhere in your kea config, or otherwise not set during packet processing, it
+will not be overridden.  The same logic applies to the option fields; they are
+only updated if they are set in the first place.
+
 Configure /etc/kea/kea-dhcp4.conf
 
 Will result in requesting json from "url" in the form of "url+mac"

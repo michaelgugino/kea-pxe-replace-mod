@@ -142,6 +142,8 @@ int pkt4_send(CalloutHandle& handle) {
     }
     // make bp available for reading.
     fclose(response_memfile);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
     // stringstream << FILE *
     ss << bp;
     free(bp);
@@ -174,9 +176,6 @@ int pkt4_send(CalloutHandle& handle) {
 
     LOG_DEBUG(logger, 0, "PRL_PKT_SEND").arg(response4_ptr->toText());
 
-    /* cleanup */
-    curl_easy_cleanup(curl);
-    curl_global_cleanup();
     return(0);
 }
 }
